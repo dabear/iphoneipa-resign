@@ -64,7 +64,7 @@ function resign_app {
     profile=$(get_provision_profile)
     if [ -f "$profile" ]; then
         echo found profile
-        iresign.py -v "$app_path" "$profile" "$sign_identity" 
+        pythonw2.7 iresign.py -v "$app_path" "$profile" "$sign_identity" 
     else
         echo "ERROR: could not find provisioning profile, aborting resign!"
         exit -2
