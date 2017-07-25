@@ -17,7 +17,7 @@ function realpath() {
 
 
 function create_temp {
-    export TEMPDIR=$(mktemp -d -t iosxdripreader)
+    export TEMPDIR=$(mktemp -d -t iphoneipa-resign)
     mkdir "$TEMPDIR/app"
     mkdir "$TEMPDIR/provisioning"
 }
@@ -76,11 +76,6 @@ function resign_app {
 
 }
 
-function verify_sign_identity {
-    sign_identity=$1
-    matching_ids_count=$(security find-identity -v -p codesigning | grep $sign_identity | wc -l)
-    echo $matching_ids_count
-}
 
 
 function get_app_signature {
@@ -91,7 +86,7 @@ function get_app_signature {
         teamid=$(echo "$res" | awk -F "=" '/TeamIdentifier/ {print $2}')
         echo "Team $teamid (signtime: $signtime)"
     else
-        echo "none (none)"
+        echo "Team none (signtime: none)"
     fi 
 }
 
@@ -111,7 +106,6 @@ function apphelp {
 }
 
 function guard_is_developer {
-    set -x
     devid=$1
     signing_id_count=$(security find-identity -v -p codesigning | grep $devid | wc -l)
     if [ "$signing_id_count" -eq "0" ]; then
