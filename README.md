@@ -3,20 +3,11 @@
 Resigns an iPhone .ipa with your own signing certificate
 
 ## Dependencies
-Currently depends on iResign.py. Please install it with python's pip module first!
-To install pip, use the following command:
-
-```
-sudo easy_install pip
-```
-
-Then install iResign:
-```
-sudo pip install iResign
-```
-
+All dependencies are included, no need to install manually anymore!
 
 ## Usage
+
+Download or clone this repository to your Mac. Open a command line and change directory to where you downloaded this app, then run:
 ```
 ./resign.sh <ipafile> <mobileprovisionfile>
 ```
