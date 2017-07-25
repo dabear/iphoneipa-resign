@@ -12,7 +12,7 @@ sudo pip install iResign
 
 ## Usage
 ```
-resign.sh <ipafile> <mobileprovisionfile>"
+resign.sh <ipafile> <mobileprovisionfile>
 ```
 
 Example:
