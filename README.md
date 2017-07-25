@@ -7,7 +7,8 @@ All dependencies are included, no need to install manually anymore!
 
 ## Usage, GUI version
 
-Download the the latest zip file release from https://github.com/dabear/iphoneipa-resign/releases  and extract the app within. Open the app within. You may have to cmd-click the app to be able to run it.
+Download the the latest zip file release from https://github.com/dabear/iphoneipa-resign/releases  and extract the app within. Open the app within. You may have to right click the app, then cmd-click "open" to be able to run it.
+
 
 Download the iphone app you want to resign together with the mobileprovisionfile from apple. Drag and drop both the iphone .ipa and .mobileprovisionfile to the Resign IPA app
 
