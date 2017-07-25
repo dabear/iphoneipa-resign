@@ -100,9 +100,9 @@ function repackage_app {
 
 
 function apphelp {
-    echo "Usage: resign.sh <ipafile> <mobileprovisionfile>"
-    echo "Example: ./resign.sh $HOME/Downloads/HelpDiabetes.ipa $HOME/Downloads/bjorningewildcard.mobileprovision"
-    echo "Instructions for generating/downloading mobileprovisionfiles can be found online at the following location: https://calvium.com/how-to-make-a-mobileprovision-file/"
+    printf "Usage: \n\t./resign.sh <ipafile> <mobileprovisionfile>\n"
+    printf "Example: \n\t./resign.sh $HOME/Downloads/HelpDiabetes.ipa $HOME/Downloads/bjorningewildcard.mobileprovision\n\n"
+    printf "Instructions for generating/downloading mobileprovisionfiles can be found online at the following location: https://calvium.com/how-to-make-a-mobileprovision-file/\n"
 }
 
 function guard_is_developer {
@@ -115,19 +115,8 @@ function guard_is_developer {
     
 }
 
-#ipafile=oldiosxdripreader-kopi.ipa
-developer_id="iPhone Developer"
-ipafile=$1
-provisionfile=$2
-
-create_temp
-trap remove_temp EXIT
 
 
-if [ "$#" -ne 2 ]; then
-    apphelp
-    exit 0
-fi
 
 if [ $1 = "--help" ]; then
    apphelp
@@ -140,8 +129,41 @@ if [ $1 = "-h" ]; then
    exit 0
 
 fi
+RED='\033[0;31m'
+NC='\033[0m' # No Color
 
+developer_id="iPhone Developer"
 guard_is_developer $developer_id
+
+##be gratious about parameter order, as long as it's the correct files present, swap them if necessary
+if [[ $1 =~ .*\.ipa$ ]] && [[  $2 =~ .*\.mobileprovision$ ]]; then
+    ipafile=$1
+    provisionfile=$2
+elif [[ $2 =~ .*\.ipa$ ]] && [[  $1 =~ .*\.mobileprovision$ ]]; then
+    ipafile=$2
+    provisionfile=$1
+elif [[ $1 =~ .*\.ipa$ ]]; then
+    ipafile=$1
+    #no provisionfile specified, find one!
+    adir=$(dirname $(realpath "$ipafile") )
+    #mac specific command to fetch latest modified file, also matching extension .mobileprovision
+    provisionfile=$(find "$adir" -type f -name *.mobileprovision -print0 | xargs -0 stat -f "%m %N" | sort -rn | head -1 | cut -f2- -d" ")
+
+    if [ ! -f "$provisionfile" ]; then
+        printf "${RED}Error: Incorrect Usage, no .mobileprovision file found in either argument or in same dir as .ipa!${NC}\n"
+        apphelp
+        exit -11
+    fi
+else
+    printf "${RED}Error: Incorrect Usage${NC}\n"
+    apphelp
+    exit -10
+fi
+
+
+
+create_temp
+trap remove_temp EXIT
 
 if [ ! -f "$provisionfile" ]; then
     echo ERROR: mobileprovisionfile not found
