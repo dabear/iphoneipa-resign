@@ -46,13 +46,13 @@ function copy_app_provision_profile {
 }
 
 function find_app_within_unpackaged_ipa {
-  res=$(find "$TEMPDIR" -name *.app | head -1)
+  res=$(find "$TEMPDIR" -name "*.app" | head -1)
   echo $res
 
 }
 
 function get_provision_profile {
-  res=$(find "$TEMPDIR/provisioning" -name *.mobileprovision | head -1)
+  res=$(find "$TEMPDIR/provisioning" -name "*.mobileprovision" | head -1)
   echo $res
 }
 
@@ -63,15 +63,14 @@ function resign_app {
   if [ -d "$app_path" ]; then
     profile=$(get_provision_profile)
     if [ -f "$profile" ]; then
-        echo found profile
-        pythonw2.7 iresign.py -v "$app_path" "$profile" "$sign_identity" 
+        pythonw2.7 "$BINARY_DIR/iresign.py" -v "$app_path" "$profile" "$sign_identity" 
     else
         echo "ERROR: could not find provisioning profile, aborting resign!"
         exit -2
     fi
   else
     echo "ERROR: aborting, could not find app folder within .ipa!"
-    #exit -1
+    exit -1
   fi
 
 }
@@ -132,8 +131,12 @@ fi
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+
 developer_id="iPhone Developer"
 guard_is_developer $developer_id
+
+export BINARY_DIR="$(dirname $(realpath $0))"
+
 
 ##be gratious about parameter order, as long as it's the correct files present, swap them if necessary
 if [[ $1 =~ .*\.ipa$ ]] && [[  $2 =~ .*\.mobileprovision$ ]]; then
@@ -147,8 +150,7 @@ elif [[ $1 =~ .*\.ipa$ ]]; then
     #no provisionfile specified, find one!
     adir=$(dirname $(realpath "$ipafile") )
     #mac specific command to fetch latest modified file, also matching extension .mobileprovision
-    provisionfile=$(find "$adir" -type f -name *.mobileprovision -print0 | xargs -0 stat -f "%m %N" | sort -rn | head -1 | cut -f2- -d" ")
-
+    provisionfile=$(find "$adir" -type f -name "*.mobileprovision" -print0 | xargs -0 stat -f "%m %N" | sort -rn | head -1 | cut -f2- -d" ")
     if [ ! -f "$provisionfile" ]; then
         printf "${RED}Error: Incorrect Usage, no .mobileprovision file found in either argument or in same dir as .ipa!${NC}\n"
         apphelp
