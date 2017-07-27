@@ -24,7 +24,7 @@ function create_temp {
 
 function remove_temp {
   if [ -d "$TEMPDIR" ]; then
-    rm -rf $TEMPDIR
+    rm -rf "$TEMPDIR"
   fi
 }
 
@@ -38,9 +38,9 @@ function unpackage_ipa {
 }
 
 function copy_app_provision_profile {
-  profile=$1
+  profile="$1"
   if [ -f "$profile" ]; then
-    cp $profile $TEMPDIR/provisioning
+    cp "$profile" "$TEMPDIR/provisioning"
   fi
 
 }
@@ -58,7 +58,7 @@ function get_provision_profile {
 
 function resign_app {
   #sign_identity="iPhone Developer"
-  sign_identity=$1
+  sign_identity="$1"
   app_path=$(find_app_within_unpackaged_ipa)
   if [ -d "$app_path" ]; then
     profile=$(get_provision_profile)
