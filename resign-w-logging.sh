@@ -22,4 +22,5 @@ if [ -f "$ipafile" ]; then
 else
     logdir="$HOME"
 fi
-./resign.sh "$@" &> "$logdir/resignlog.txt"
+BINARY_DIR="$(dirname "$(realpath "$0")")"
+"$BINARY_DIR"/resign.sh "$@" &> "$logdir/resignlog.txt"
