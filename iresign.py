@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+3#!/usr/bin/env python
 # coding: utf-8
 """
     iResign
@@ -108,7 +108,13 @@ def generate_entitlements(provision_entitlements, app):
 
     # use application keychain-acccess-groups in the new entitlements
     if access_groups:
-        provision_entitlements['keychain-access-groups'] = access_groups
+        #dabear modification: this part must be skipped, we really really want to use
+        # keychain-access-groups from the new provided provisionfile,
+        # *not* from original embedded provision from the original provisionfile
+        #print("dabear: reached access groups, it is:", provision_entitlements['keychain-access-groups'])
+        #print("dabear: new access group is:", access_groups)
+        #provision_entitlements['keychain-access-groups'] = access_groups
+        pass
     return provision_entitlements
 
 
@@ -166,10 +172,13 @@ def main():
     # get main three components for recodesigning
     application = read_application(arguments.app)
     provision = read_provisioning_profile(arguments.provisioning_profile)
+    
     identity = arguments.identity
 
     # print verbose information
     if arguments.verbose:
+    
+        print("----Provisioninfo----")
         show_provision_info(application['provision'])
         show_provision_info(provision)
 
