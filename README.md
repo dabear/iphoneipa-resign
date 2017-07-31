@@ -1,3 +1,5 @@
+# Experimental software
+This software is experimental and not at all complete! It works for simple .ipa's. It works for resigning iosxdripreader. I can't make guarantees on other .ipas. Both the command line version and the gui requires Mac OS.
 # iphoneipa-resign
 
 Resigns an iPhone .ipa with your own signing certificate
